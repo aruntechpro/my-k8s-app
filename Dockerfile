@@ -1,9 +1,10 @@
 FROM nginx:alpine
 
-# Upgrade all packages to get security fixes (including libpng >=1.6.55-r0)
-RUN apk update && \
-    apk upgrade --available && \
+# Security: Upgrade packages to pull in libpng >= 1.6.55-r0 (fixes CVE-2026-25646)
+# Cleanup cache to keep image small
+RUN apk update --no-cache && \
+    apk upgrade --available --no-cache && \
     rm -rf /var/cache/apk/*
 
-# Your custom content
+# Your original content
 COPY index.html /usr/share/nginx/html/
